@@ -55,10 +55,17 @@ class Bacteria(arcade.Sprite):
 
         self.zuper = zuper
         if zuper:
-            self.W3 = np.zeros_like(self.W3)
-            self.W3[0][4] = 1
-            self.W3[1][5] = 1
-            print(self.W3)
+            # self.W3 = np.zeros_like(self.W3)
+            # self.W3[0][4] = 1
+            # self.W3[1][5] = 1
+            # print(self.W3)
+            self.W1 = np.zeros_like(self.W1)
+            self.W1[0][4] = 1
+            self.W1[1][5] = 1
+            self.W2 = np.zeros_like(self.W2)
+            self.W2[0][0] = 1
+            self.W2[1][1] = 1
+
 
     def update(self, delta_time):
         #self.angle = self.angle + 1
@@ -83,7 +90,7 @@ class Bacteria(arcade.Sprite):
         self.weight += 0.1
         food.remove_from_sprite_lists()
 
-    def dist_to(self, smthing):
+    def dist_to(self, smthing) -> float:
         if not smthing is None:
             return np.linalg.norm([self.center_x - smthing.center_x, self.center_y - smthing.center_y])
         else:
@@ -115,24 +122,24 @@ class Bacteria(arcade.Sprite):
                         (self.angle%360)/360,
                         1])
 
-        # h = np.dot(self.W1, inp)
-        # h = 1/(1 + np.exp(-h))
-        # h = np.concatenate((h, [1]))
-        # output = np.dot(self.W2, h)
-        output = np.dot(self.W3, inp)
+        h = np.dot(self.W1, inp)
+        h = 1/(1 + np.exp(-h))
+        h = np.concatenate((h, [1]))
+        output = np.dot(self.W2, h)
+        # output = np.dot(self.W3, inp)
 
         # if self.zuper:
         #     print(inp)
-            # print(output)
+        #     print(h)
+        #     print(output)
 
         output = 1/(1 + np.exp(-output))
         output = 2*output-1
         norm = np.linalg.norm(output[:2])
         output /= norm
-        # if self.zuper:
-        #     print(output)
         angle = math.atan2(output[1], output[0])
         self.angle = math.degrees(angle)
+        self.priorities = output[2]
+
         # if self.zuper:
         #     print(self.angle)
-        self.priorities = output[2]

@@ -34,7 +34,7 @@ class MyGame(arcade.Window):
         # Sprite lists
         self.food_list = arcade.SpriteList()
         self.bacterias = Bacterias()
-        #self.bacterias.append(Bacteria(zuper=True))
+        self.bacterias.append(Bacteria(zuper=True))
 
         # Set up the player
         self.score = 0
@@ -74,23 +74,16 @@ class MyGame(arcade.Window):
 
     def on_update(self, delta_time):
         """ Movement and game logic """
-
         # delta_time *= 5
-
         if random.random() < 0.1:
             food = arcade.Sprite("sprites/food.png", SPRITE_SCALING_FOOD)
-
             # Position the food
             food.center_x = random.randrange(300, SCREEN_WIDTH-300)
             food.center_y = random.randrange(300, SCREEN_HEIGHT-300)
-
             # Add the food to the lists
             self.food_list.append(food)
-
-
         # Call update on all sprites
         self.bacterias.update(delta_time)
-
         # Loop through each bacteria
         for bacteria in self.bacterias:
             hit_list = arcade.check_for_collision_with_list(bacteria, self.food_list)
@@ -132,15 +125,12 @@ class MyGame(arcade.Window):
                 self.bacterias.append(Bacteria(parent=self.bacterias[i]))
                 self.bacterias.append(Bacteria())
 
-
         for bacteria in self.bacterias:
             if bacteria.weight > 3:
                 # we increase speed or we have a child
                 if bacteria.priorities > 0:
                     self.bacterias.append(Bacteria(parent = bacteria))
                     bacteria.weight -= 1
-
-
 
 
 
